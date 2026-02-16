@@ -41,6 +41,14 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  ios: true
+  android: true
+  image_path: "assets/icon_app.png"
+  # Generate icon_app.png first: flutter test test/generate_app_icon_test.dart
+  # Then run: dart run flutter_launcher_icons
 
 flutter:
   uses-material-design: true

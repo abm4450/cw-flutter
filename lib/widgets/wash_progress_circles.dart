@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../core/constants/app_colors.dart';
 
 class WashProgressCircles extends StatelessWidget {
@@ -57,10 +58,16 @@ class _CircleIcon extends StatelessWidget {
                   : null,
             ),
             child: Center(
-              child: Icon(
-                Icons.local_car_wash,
-                size: 24,
-                color: active ? Colors.white : AppColors.borderMedium,
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: SvgPicture.asset(
+                  'assets/logo.svg',
+                  fit: BoxFit.contain,
+                  colorFilter: ColorFilter.mode(
+                    active ? Colors.white : AppColors.borderMedium,
+                    BlendMode.srcIn,
+                  ),
+                ),
               ),
             ),
           ),

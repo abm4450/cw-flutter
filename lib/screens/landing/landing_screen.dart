@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cw_flutter/l10n/app_localizations.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/errors/api_error.dart';
@@ -218,8 +219,18 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                             color: AppColors.primary,
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(Icons.local_car_wash,
-                              color: Colors.white, size: 18),
+                          clipBehavior: Clip.antiAlias,
+                          child: Padding(
+                            padding: const EdgeInsets.all(6),
+                            child: SvgPicture.asset(
+                              'assets/logo.svg',
+                              fit: BoxFit.contain,
+                              colorFilter: const ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(

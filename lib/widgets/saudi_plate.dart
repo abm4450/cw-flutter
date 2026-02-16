@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../core/utils/plate_utils.dart';
 
+/// Saudi license plate widget matching the Node (cw) project design:
+/// - Grid 1 : 1.25 (digits : letters), text-2xl (24) / text-xl (20)
+/// - Plate logo SVG 16x16, "السعودية" 4.5px, KSA 7px, dot 6px
 class SaudiPlate extends StatelessWidget {
   final String plate;
   final double scale;
@@ -10,6 +14,8 @@ class SaudiPlate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final parsed = parsePlate(plate);
+    // English letters displayed reversed with spaces (like Node: letters.split('').reverse().join(' '))
+    final lettersDisplay = parsed.letters.replaceAll(' ', '').split('').reversed.join(' ');
 
     return Directionality(
       textDirection: TextDirection.ltr,
@@ -32,7 +38,7 @@ class SaudiPlate extends StatelessWidget {
           ),
           child: Row(
             children: [
-              // Main 2x2 grid
+              // Main grid: cols 1 : 1.25 (flex 4 : 5) — matches Node grid-cols-[1fr_1.25fr]
               Expanded(
                 child: Column(
                   children: [
@@ -41,20 +47,16 @@ class SaudiPlate extends StatelessWidget {
                       child: Row(
                         children: [
                           Expanded(
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(color: Colors.black, width: 1.5),
-                                  right: BorderSide(color: Colors.black, width: 1.5),
-                                ),
-                              ),
-                              alignment: Alignment.center,
+                            flex: 4,
+                            child: _cell(
+                              borderBottom: true,
+                              borderRight: true,
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 4),
                                 child: Text(
                                   parsed.hindiDigits,
                                   style: const TextStyle(
-                                    fontSize: 22,
+                                    fontSize: 24,
                                     fontWeight: FontWeight.bold,
                                     height: 1,
                                     fontFamily: 'serif',
@@ -65,20 +67,15 @@ class SaudiPlate extends StatelessWidget {
                           ),
                           Expanded(
                             flex: 5,
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(color: Colors.black, width: 1.5),
-                                  right: BorderSide(color: Colors.black, width: 1.5),
-                                ),
-                              ),
-                              alignment: Alignment.center,
+                            child: _cell(
+                              borderBottom: true,
+                              borderRight: true,
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 4),
                                 child: Text(
                                   parsed.arabicLetters,
                                   style: const TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                     height: 1,
                                   ),
@@ -94,19 +91,15 @@ class SaudiPlate extends StatelessWidget {
                       child: Row(
                         children: [
                           Expanded(
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                  right: BorderSide(color: Colors.black, width: 1.5),
-                                ),
-                              ),
-                              alignment: Alignment.center,
+                            flex: 4,
+                            child: _cell(
+                              borderRight: true,
                               child: Text(
                                 parsed.digits,
                                 style: const TextStyle(
-                                  fontSize: 22,
+                                  fontSize: 24,
                                   fontWeight: FontWeight.bold,
-                                  letterSpacing: 0,
+                                  letterSpacing: -0.5,
                                   height: 1,
                                 ),
                               ),
@@ -114,20 +107,15 @@ class SaudiPlate extends StatelessWidget {
                           ),
                           Expanded(
                             flex: 5,
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                  right: BorderSide(color: Colors.black, width: 1.5),
-                                ),
-                              ),
-                              alignment: Alignment.center,
+                            child: _cell(
+                              borderRight: true,
                               child: Text(
-                                parsed.letters,
+                                lettersDisplay,
                                 style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 0,
-                                    height: 1,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 4,
+                                  height: 1,
                                 ),
                               ),
                             ),
@@ -138,18 +126,29 @@ class SaudiPlate extends StatelessWidget {
                   ],
                 ),
               ),
-              // Right KSA section
-              SizedBox(
+              // Right section: logo + السعودية + KSA + dot — matches Node w-[30px] py-1
+              Container(
                 width: 30,
+                decoration: const BoxDecoration(
+                  border: Border(
+                    left: BorderSide(color: Colors.black, width: 1.5),
+                  ),
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(top: 4),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
                       child: Column(
                         children: [
-                          Icon(Icons.account_balance, size: 14, color: Colors.black),
-                          Text(
+                          SvgPicture.asset(
+                            'assets/platelogo.svg',
+                            width: 16,
+                            height: 16,
+                            fit: BoxFit.contain,
+                          ),
+                          const SizedBox(height: 2),
+                          const Text(
                             'السعودية',
                             style: TextStyle(
                               fontSize: 4.5,
@@ -161,6 +160,7 @@ class SaudiPlate extends StatelessWidget {
                       ),
                     ),
                     const Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Text('K', style: TextStyle(fontSize: 7, fontWeight: FontWeight.w900, height: 0.8)),
                         Text('S', style: TextStyle(fontSize: 7, fontWeight: FontWeight.w900, height: 0.8)),
@@ -185,6 +185,23 @@ class SaudiPlate extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _cell({
+    required Widget child,
+    bool borderBottom = false,
+    bool borderRight = false,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: borderBottom ? const BorderSide(color: Colors.black, width: 1.5) : BorderSide.none,
+          right: borderRight ? const BorderSide(color: Colors.black, width: 1.5) : BorderSide.none,
+        ),
+      ),
+      alignment: Alignment.center,
+      child: child,
     );
   }
 }
