@@ -1,0 +1,28 @@
+{
+  "name": "cw-flutter",
+  "version": "1.0.0",
+  "description": "Car Wash Pro Membership - Washing Circle.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abm4450/cw-flutter.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/abm4450/cw-flutter/issues"
+  },
+  "homepage": "https://github.com/abm4450/cw-flutter#readme",
+  "devDependencies": {
+    "sharp": "^0.34.5"
+  }
+}

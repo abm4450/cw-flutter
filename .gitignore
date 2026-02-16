@@ -46,3 +46,11 @@ app.*.map.json
 
 # Local dev: Chrome profile used when running with CORS disabled
 .chrome_dev_profile/
+
+# Node (for icon tool)
+node_modules/
+
+# Build artifacts
+*.ipa
+*.zip
+Runner.app.zip
